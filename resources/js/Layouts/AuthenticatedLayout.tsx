@@ -5,7 +5,6 @@ import NavLink from '@/Components/NavLink';
 import ResponsiveNavLink from '@/Components/ResponsiveNavLink';
 import { Link, usePage } from '@inertiajs/react';
 import { User } from '@/types';
-import 'react-toastify/dist/ReactToastify.css';
 
 export default function Authenticated({ user, header, children }: PropsWithChildren<{ user: User, header?: ReactNode }>) {
     const [showingNavigationDropdown, setShowingNavigationDropdown] = useState(false);
@@ -34,11 +33,14 @@ export default function Authenticated({ user, header, children }: PropsWithChild
                                         Post
                                     </NavLink>
                                 </div>
-                                <div className="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                                    <NavLink href='/categories' active={route().current('categories.index')}>
-                                        Categories
-                                    </NavLink>
-                                </div>
+                                {/* akses super admin */}
+                                {user?.role === 'superAdmin' &&
+                                    <div className="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                                        <NavLink href='/categories' active={route().current('categories.index')}>
+                                            Categories
+                                        </NavLink>
+                                    </div>
+                                }
                             </div>
 
                             <div className="hidden sm:flex sm:items-center sm:ms-6">

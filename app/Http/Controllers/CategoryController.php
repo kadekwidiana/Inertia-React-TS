@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Category;
+use App\Models\Post;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 
 class CategoryController extends Controller
@@ -24,7 +26,7 @@ class CategoryController extends Controller
      */
     public function create()
     {
-        //
+        return Inertia::render('Categories/Create');
     }
 
     /**
@@ -32,7 +34,14 @@ class CategoryController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $data = $request->validate([
+            'name' => 'required'
+        ]);
+
+        Category::create($data);
+
+        //redirect
+        return redirect()->route('categories.index')->with('message', 'Data successfuly saved!');
     }
 
     /**
@@ -40,7 +49,10 @@ class CategoryController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $categoryById = Category::where('id', $id)->first();
+        return Inertia::render('Categories/Detail', [
+            'categoryById' => $categoryById,
+        ]);
     }
 
     /**
@@ -48,7 +60,10 @@ class CategoryController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $categoryById = Category::findOrFail($id);
+        return Inertia::render('Categories/Edit', [
+            'categoryById' => $categoryById
+        ]);
     }
 
     /**
@@ -56,7 +71,17 @@ class CategoryController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $data = $request->validate([
+            'name' => 'required'
+        ]);
+
+        // $category untuk variabel data category by id
+        $category = Category::findOrFail($id);
+
+        $category->update($data);
+
+        //redirect
+        return redirect()->route('categories.index')->with('message', 'Data successfuly update!');
     }
 
     /**
@@ -64,6 +89,22 @@ class CategoryController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $category = Category::findOrFail($id);
+
+        // Menghapus post jika data motor yang ingin di hapus ada di post
+        $post = Post::where('category_id', $id)->first(); // mencari data post berdasarkan plat_motor
+        if ($post) {
+            $post->delete();
+        }
+
+        // Hapus gambar terkait jika ada
+        if ($post->image) {
+            Storage::delete($post->image);
+        }
+
+        $category->delete();
+
+        //redirect
+        return redirect()->route('categories.index')->with('message', 'Data successfuly deleted!');
     }
 }
