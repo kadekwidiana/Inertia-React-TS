@@ -55,7 +55,6 @@ export default function CreateCategory({ auth }: PageProps) {
                             <div className="space-y-12">
                                 <div className="sm:border-b border-gray-900/10 pb-12">
                                     <div className="mt-6 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
-
                                         <div className="col-span-full">
                                             <label htmlFor="about" className=''>
                                                 Category Name
