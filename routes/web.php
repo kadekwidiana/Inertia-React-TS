@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\FrontpageController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Foundation\Application;
@@ -26,6 +27,9 @@ use Inertia\Inertia;
 //         'phpVersion' => PHP_VERSION,
 //     ]);
 // });
+
+// Route::get('/', [FrontpageController::class, 'index'])->name('frontpage.index');
+Route::get('/test', [FrontpageController::class, 'test'])->name('frontpage.test');
 
 Route::get('/', function () {
     return view('frontpage.map');
